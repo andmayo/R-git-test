@@ -3,7 +3,6 @@ title: "Keep it Local - Beer"
 author: "Dre & Kalen"
 date: 2020-12-01T21:13:14-05:00
 categories: ["R"]
-tags: ["R Markdown", "plot", "regression"]
 ---
 
 ```{r setup, include=FALSE}
@@ -13,6 +12,9 @@ library(dplyr)
 library (tidyr)
 library (blogdown)
 library(rvest)
+library(reactable)
+library(shiny)
+
 
 link = "https://www.ratebeer.com/breweries/nova-scotia/57/39/"
 page = read_html(link)
@@ -22,15 +24,50 @@ name = page %>% html_nodes ("#brewerTable a:nth-child(1)") %>% html_text ( )
 name 
 location = page %>% html_nodes(".filter") %>% html_text()
 location
-
+beers = page %>% html_nodes(".hidden-sm+ td") %>% html_text ()
+beers
 
 brew = data.frame(name)
 View (brew)
 brew <- brew [-c (65:72), ]
+beers <- beers [-c (65:72)]
 
 loc <- data.frame (location)
 
-DB <- data.frame (brew, loc)
+DB <- data.frame (brew, loc, beers)
 View (DB)
 ```
+
+Welcome to our (Dre and Kalen's) little website
+Here we will update you on the local beers in the Maritimes! 
+
+# First, Nova Scotia. 
+```{r NS Brew, echo= FALSE}
+reactable(DB, 
+          columns = list (
+            beers = colDef(name = "# of Local Beers", 
+                           align = "center"),
+            brew = colDef(name = "Breweries"), 
+            location = colDef(name = "Location", 
+                              align = "center")
+          ), 
+          searchable = TRUE, 
+          highlight = TRUE, 
+          theme = reactableTheme(
+             color = "hsl(233, 9%, 87%)",
+  backgroundColor = "hsl(233, 9%, 19%)",
+  borderColor = "hsl(233, 9%, 22%)",
+  stripedColor = "hsl(233, 12%, 22%)",
+  highlightColor = "hsl(233, 12%, 24%)",
+  inputStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
+  selectStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
+  pageButtonHoverStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
+  pageButtonActiveStyle = list(backgroundColor = "hsl(233, 9%, 28%)")
+          ))
+```
+
+
+
+
+
 
