@@ -1,4 +1,4 @@
 theme: "hugo-PaperMod"
-baseURL: http://example.org/
+baseURL: "http://keeplocal-beer.netlify.app/""
 languageCode: en-us
-title: My New Hugo Site
+title: Keep it Local
