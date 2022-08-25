@@ -36,6 +36,28 @@ loc <- data.frame (location)
 
 DB <- data.frame (brew, loc, beers)
 View (DB)
+
+
+link_NB = "https://www.ratebeer.com/breweries/new-brunswick/55/39/"
+page_NB = read_html(link_NB)
+
+name_NB = page_NB %>% html_nodes ("#brewerTable a:nth-child(1)") %>% html_text ( )
+name_NB 
+location_NB = page_NB %>% html_nodes (".filter") %>% html_text ()
+location_NB
+beers_NB = page_NB %>%  html_nodes (".hidden-sm+ td") %>% html_text()
+beers_NB
+
+beers_NB <- data.frame (beers_NB)
+View (beers_NB)
+beers_NB <- beers_NB [-c(62:67),]
+
+name_NB <- data.frame (name_NB)
+View (name_NB)
+name_NB <- name_NB [-c (62:67), ]
+
+DB_NB <- data.frame (name_NB, location_NB, beers_NB) 
+View (DB_NB)
 ```
 
 Welcome to our (Dre and Kalen's) little website
@@ -67,7 +89,30 @@ reactable(DB,
 ```
 
 
+# Second, New Brunswick 
 
-
+```{r NB, echo=FALSE}
+reactable(DB_NB, 
+          columns = list (
+            beers_NB = colDef(name = "# of Local Beers", 
+                           align = "center"),
+            name_NB = colDef(name = "Breweries"), 
+            location_NB = colDef(name = "Location", 
+                              align = "center")
+          ), 
+          searchable = TRUE, 
+          highlight = TRUE, 
+          theme = reactableTheme(
+             color = "hsl(233, 9%, 87%)",
+  backgroundColor = "hsl(233, 9%, 19%)",
+  borderColor = "hsl(233, 9%, 22%)",
+  stripedColor = "hsl(233, 12%, 22%)",
+  highlightColor = "hsl(233, 12%, 24%)",
+  inputStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
+  selectStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
+  pageButtonHoverStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
+  pageButtonActiveStyle = list(backgroundColor = "hsl(233, 9%, 28%)")
+          ))
+```
 
 
